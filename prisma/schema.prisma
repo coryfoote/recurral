@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Merchant {
+  id             String   @id @default(cuid())
+  stripeAccountId String   @unique
+  perReferral    Int
+  discountType   String
+  capPercent     Int
+  referrals      Referral[]
+}
+
+model Referral {
+  id              String   @id @default(cuid())
+  referrerId      String
+  referredId      String
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+}
